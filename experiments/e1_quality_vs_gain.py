@@ -14,7 +14,7 @@ from the same system (no shift; shift is E3). Nothing is tuned: XGBoost settings
     python -m experiments.e1_quality_vs_gain                       # whole grid, all cores
     python -m experiments.e1_quality_vs_gain --shard 0 --nshards 10 --jobs 8
     python -m experiments.e1_quality_vs_gain --pilot              # 4 small systems, quick check
-Resumable: systems already in results/raw/e1.jsonl are skipped.
+Resumable: systems already in the output file (results/raw/e1.jsonl, or e1_shard<k>.jsonl) are skipped.
 Note: FENNEC's 4x penalty was chosen on seeds 0-4, so its learned graphs are reported on seeds 5-9.
 """
 import os
@@ -150,7 +150,9 @@ def main():
     if a.pilot:
         cfg.update(mechanisms=["mlp", "linear"], d=[10], n=[200], seeds=[0, 5], learners=["pc", "fennec"])
     RAW.mkdir(parents=True, exist_ok=True)
-    out = RAW / (f"{cfg['name']}_pilot.jsonl" if a.pilot else f"{cfg['name']}.jsonl")
+    # one file per shard: concurrent appends to a shared file can interleave on network filesystems
+    tag = "_pilot" if a.pilot else (f"_shard{a.shard}" if a.nshards > 1 else "")
+    out = RAW / f"{cfg['name']}{tag}.jsonl"
     systems = [{"mechanism": m, "d": d, "n": n, "seed": s}
                for m, d, n, s in product(cfg["mechanisms"], cfg["d"], cfg["n"], cfg["seeds"])][a.shard::a.nshards]
     key = lambda r: (r["mechanism"], r["d"], r["n"], r["seed"])

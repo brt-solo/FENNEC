@@ -27,8 +27,8 @@ def gtype(g):
 
 
 def load(pilot, seeds):
-    path = RAW / ("e1_pilot.jsonl" if pilot else "e1.jsonl")
-    recs = [json.loads(l) for l in path.read_text().splitlines()]
+    paths = [RAW / "e1_pilot.jsonl"] if pilot else sorted(p for p in RAW.glob("e1*.jsonl") if "pilot" not in p.name)
+    recs = [json.loads(l) for p in paths for l in p.read_text().splitlines()]
     d = pd.DataFrame([{**{k: r[k] for k in KEY}, **x} for r in recs for x in r["rows"]])
     if "error" in d:
         print("compiler errors:", int(d.error.notna().sum()))
