@@ -9,10 +9,11 @@ benchmarks/results/results.jsonl; (dataset, method) pairs already present are sk
     python -m benchmarks.run --pilot               # d = 10, n = 200 only, 2 seeds
     python -m benchmarks.run --methods fennec pc   # selected methods
     python -m benchmarks.run --noise-sd 1.0        # signal-to-noise 1:1 (writes results_noise1.jsonl)
+    python -m benchmarks.run --generator gcastle   # outside generator, ER2 + SF2 graphs (results_gcastle.jsonl)
 
 Metrics: skeleton precision/recall/F1, Markov-blanket F1, correctly oriented edges, SHD,
 runtime; plus each dataset's R^2-sortability (Kendall tau between how predictable a variable
-is and its position in the causal order; ~0 means no order leakage).
+is and its position in the causal order; ~0 means no order leakage) and varsortability (0.5 = none).
 """
 import os
 
@@ -25,14 +26,13 @@ from itertools import product
 
 import numpy as np
 from joblib import Parallel, delayed
-from scipy.stats import kendalltau
-from sklearn.linear_model import LinearRegression
-
 from pathlib import Path
 
 from benchmarks.generate import MECHANISMS, simulate
+from benchmarks.generate_gcastle import GC_MECHANISMS, simulate_gcastle
 from benchmarks.methods import METHODS, PARALLEL_SAFE
 from benchmarks.metrics import graph_metrics
+from benchmarks.sortability import r2_sortability, varsortability
 
 OUT = Path(__file__).resolve().parent / "results"
 OUT.mkdir(exist_ok=True)
@@ -64,19 +64,14 @@ def blanket_f1(pred, truth):
     return 2 * prec * rec / (prec + rec) if tp else 0.0
 
 
-def r2_sortability(X, adj):
-    d = X.shape[1]
-    r2 = [LinearRegression().fit(np.delete(X, j, 1), X[:, j]).score(np.delete(X, j, 1), X[:, j]) for j in range(d)]
-    # causal depth of each node (longest path from a root)
-    depth = np.zeros(d)
-    for _ in range(d):
-        for i, j in zip(*np.nonzero(adj)):
-            depth[j] = max(depth[j], depth[i] + 1)
-    return float(kendalltau(r2, depth).statistic)
+def make_data(ds, noise_sd=0.5):
+    if "graph" in ds:  # gCastle dataset
+        return simulate_gcastle(ds["d"], ds["n"], ds["mechanism"], ds["seed"], graph=ds["graph"])
+    return simulate(ds["d"], ds["n"], ds["mechanism"], ds["seed"], noise_sd=noise_sd)
 
 
 def run_one(ds, method, noise_sd=0.5):
-    df, adj, info = simulate(ds["d"], ds["n"], ds["mechanism"], ds["seed"], noise_sd=noise_sd)
+    df, adj, info = make_data(ds, noise_sd)
     X = df.to_numpy()
     t = time.time()
     try:
@@ -89,7 +84,9 @@ def run_one(ds, method, noise_sd=0.5):
     return {**ds, "method": method, "seconds": secs, "error": err, "true_edges": int(adj.sum()),
             "blanket_f1": blanket_f1(pred, adj), **{k: m[k] for k in
             ["n_edges", "n_undirected", "skel_tp", "skel_precision", "skel_recall", "skel_f1", "dir_tp", "shd"]},
-            "r2_sortability": r2_sortability(X, adj), "pred_edges": [[int(i), int(j)] for i, j in zip(*np.nonzero(pred))]}
+            "r2_sortability": r2_sortability(X, adj), "varsortability": varsortability(X, adj),
+            **({"varsortability_raw": info["varsortability_raw"]} if "varsortability_raw" in info else {}),
+            "pred_edges": [[int(i), int(j)] for i, j in zip(*np.nonzero(pred))]}
 
 
 def main():
@@ -103,21 +100,29 @@ def main():
     ap.add_argument("--noise-sd", type=float, default=0.5,
                     help="noise SD on the standardized signal (0.5 = signal-to-noise 4:1; 1.0 = 1:1); "
                          "non-default values write to results_noise<sd>.jsonl")
+    ap.add_argument("--generator", choices=["fennec", "gcastle"], default="fennec",
+                    help="gcastle = outside generator (gCastle IIDSimulation), ER2 and SF2 graphs")
     args = ap.parse_args()
     global RESULTS
-    if args.noise_sd != 0.5:
+    if args.generator == "gcastle":
+        RESULTS = OUT / "results_gcastle.jsonl"
+    elif args.noise_sd != 0.5:
         RESULTS = OUT / f"results_noise{args.noise_sd:g}.jsonl"
     grid = (dict(d=10, n=200, seeds=[0, 1]) if args.pilot else dict(d=args.d, n=args.n, seeds=args.seeds))
-    ds_list = [{"mechanism": m, "d": d, "n": n, "seed": s} for m, d, n, s in
-               product(MECHANISMS, np.atleast_1d(grid["d"]), np.atleast_1d(grid["n"]), grid["seeds"])]
+    if args.generator == "gcastle":
+        ds_list = [{"mechanism": m, "graph": g, "d": d, "n": n, "seed": s} for g, m, d, n, s in
+                   product(["ER", "SF"], GC_MECHANISMS, np.atleast_1d(grid["d"]), np.atleast_1d(grid["n"]), grid["seeds"])]
+    else:
+        ds_list = [{"mechanism": m, "d": d, "n": n, "seed": s} for m, d, n, s in
+                   product(MECHANISMS, np.atleast_1d(grid["d"]), np.atleast_1d(grid["n"]), grid["seeds"])]
     ds_list = [{k: (int(v) if isinstance(v, np.integer) else v) for k, v in ds.items()} for ds in ds_list]
     done = set()
     if RESULTS.exists():
         for line in RESULTS.read_text().splitlines():
             r = json.loads(line)
-            done.add((r["mechanism"], r["d"], r["n"], r["seed"], r["method"]))
+            done.add((r.get("graph"), r["mechanism"], r["d"], r["n"], r["seed"], r["method"]))
     todo = [(ds, m) for ds in ds_list for m in args.methods
-            if (ds["mechanism"], ds["d"], ds["n"], ds["seed"], m) not in done]
+            if (ds.get("graph"), ds["mechanism"], ds["d"], ds["n"], ds["seed"], m) not in done]
     print(f"{len(ds_list)} datasets, {len(todo)} (dataset, method) runs to do", flush=True)
 
     def write(rows):

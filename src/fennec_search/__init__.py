@@ -10,6 +10,7 @@ import numpy as np
 
 from .adjust import backdoor_effect
 from .causal_model import XGB_BIG, build_causal_model, effects, infer_types
+from .compilers import COMPILERS, make_compiler, markov_blanket
 from .ensemble import GraphEnsemble
 from .graph import full_mask, to_dag
 from .score import CVScore

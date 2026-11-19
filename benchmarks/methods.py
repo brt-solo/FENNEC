@@ -69,6 +69,16 @@ def fennec_bic(X, n_jobs=-1):
     return hill_climb(CVScore(np.asarray(X, float), model="xgb", n_jobs=n_jobs, penalty_mult=1.0), _full_mask(X.shape[1]))[0]
 
 
+def fennec_pen2(X, n_jobs=-1):
+    """Penalty audit (E0): 2x BIC."""
+    return hill_climb(CVScore(np.asarray(X, float), model="xgb", n_jobs=n_jobs, penalty_mult=2.0), _full_mask(X.shape[1]))[0]
+
+
+def fennec_pen8(X, n_jobs=-1):
+    """Penalty audit (E0): 8x BIC."""
+    return hill_climb(CVScore(np.asarray(X, float), model="xgb", n_jobs=n_jobs, penalty_mult=8.0), _full_mask(X.shape[1]))[0]
+
+
 def fennec_screened(X, n_jobs=-1):
     nb = _lasso_neighbours(X)
     mask = (nb | nb.T) & _full_mask(X.shape[1])
@@ -174,6 +184,20 @@ def r2_sortnregress(X):
     n, d = X.shape
     r2 = [LinearRegression().fit(np.delete(X, j, 1), X[:, j]).score(np.delete(X, j, 1), X[:, j]) for j in range(d)]
     order = np.argsort(r2)
+    adj = np.zeros((d, d), int)
+    for k in range(1, d):
+        j, prev = order[k], order[:k]
+        coef = LassoLarsIC(criterion="bic").fit(X[:, prev], X[:, j]).coef_
+        adj[prev[np.abs(coef) > 1e-8], j] = 1
+    return adj
+
+
+def var_sortnregress(X):
+    """Artefact check (Reisach et al. 2021): order variables by marginal variance (ascending), then
+    lasso-regress each on its predecessors. On standardized data this is at chance by construction."""
+    from sklearn.linear_model import LassoLarsIC
+    n, d = X.shape
+    order = np.argsort(X.var(0) + 1e-12 * np.random.default_rng(0).random(d))  # random tie-break
     adj = np.zeros((d, d), int)
     for k in range(1, d):
         j, prev = order[k], order[:k]
@@ -431,9 +455,9 @@ def grandag(X, iterations=10000):
     return cam_prune(Xj, A) if A.any() else A
 
 
-METHODS = {"fennec": fennec, "fennec_bic": fennec_bic, "fennec_screened": fennec_screened, "linear_score": linear_score,
+METHODS = {"fennec": fennec, "fennec_bic": fennec_bic, "fennec_pen2": fennec_pen2, "fennec_pen8": fennec_pen8, "fennec_screened": fennec_screened, "linear_score": linear_score,
            "pc": pc, "ges": ges, "nbsel": nbsel, "mmhc": mmhc, "lingam": lingam, "notears_mlp": notears_mlp,
-           "r2_sortnregress": r2_sortnregress, "cam": cam, "mmhc_bnlearn": mmhc_bnlearn, "gsf": gsf, "bidag": bidag,
+           "r2_sortnregress": r2_sortnregress, "var_sortnregress": var_sortnregress, "cam": cam, "mmhc_bnlearn": mmhc_bnlearn, "gsf": gsf, "bidag": bidag,
            "score_sm": score_sm, "nogam": nogam, "grandag": grandag}
-PARALLEL_SAFE = {"linear_score", "pc", "ges", "nbsel", "mmhc", "lingam", "notears_mlp", "r2_sortnregress", "cam",
-                 "mmhc_bnlearn", "gsf", "bidag", "score_sm", "nogam", "grandag"}  # single-threaded
+PARALLEL_SAFE = {"linear_score", "pc", "ges", "nbsel", "mmhc", "lingam", "notears_mlp", "r2_sortnregress", "var_sortnregress",
+                 "cam", "mmhc_bnlearn", "gsf", "bidag", "score_sm", "nogam", "grandag"}  # single-threaded

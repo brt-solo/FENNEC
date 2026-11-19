@@ -1,0 +1,7 @@
+{
+  "name": "e0",
+  "description": "E0 artefact checks: sortability of both generators, penalty audit (1/2/4/8x BIC, seeds 0-4 vs 5-9), outside generator (gCastle)",
+  "sortability": {"d": [10, 20], "n": [200, 1000], "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]},
+  "penalty_methods": {"fennec_bic": 1, "fennec_pen2": 2, "fennec": 4, "fennec_pen8": 8},
+  "gcastle_methods": ["fennec", "cam", "nogam", "score_sm", "pc", "ges", "r2_sortnregress", "var_sortnregress"]
+}
