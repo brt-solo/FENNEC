@@ -1,0 +1,25 @@
+regime,detector,true children,true parents,broken non-blanket,other features
+iid,causal_v2,0.0125,0.0,0.0,0.0
+iid,gf_conditional,0.0125,0.0,0.0,0.0125
+iid,gf_marginal,0.0,0.0,0.0,0.0125
+iid,v2_drop_any,0.0125,0.0,0.0,0.0
+child_break,causal_v2,1.2625,0.075,0.0,0.0125
+child_break,gf_conditional,1.5,0.525,0.0125,0.4375
+child_break,gf_marginal,0.0,0.0375,0.0375,0.0125
+child_break,v2_drop_any,1.35,0.1125,0.0,0.025
+parent_mech_break,causal_v2,0.0,0.09375,0.0,0.015625
+parent_mech_break,gf_conditional,0.0,1.203125,0.03125,0.921875
+parent_mech_break,gf_marginal,0.03125,0.0,0.0625,0.0625
+parent_mech_break,v2_drop_any,0.015625,0.921875,0.0,0.1875
+other_break,causal_v2,0.0125,0.0125,0.0,0.0
+other_break,gf_conditional,0.15,0.4125,2.0,1.5125
+other_break,gf_marginal,0.0,0.0375,0.0125,0.0
+other_break,v2_drop_any,0.025,0.0875,0.025,0.075
+parent_shift,causal_v2,0.0875,0.0625,0.0,0.0125
+parent_shift,gf_conditional,0.125,1.1625,0.1375,0.85
+parent_shift,gf_marginal,1.225,1.425,0.675,0.55
+parent_shift,v2_drop_any,0.1,0.675,0.0125,0.2
+both,causal_v2,1.34375,0.1875,0.0,0.015625
+both,gf_conditional,1.625,1.25,0.046875,1.25
+both,gf_marginal,0.0,0.046875,0.0625,0.015625
+both,v2_drop_any,1.4375,1.03125,0.0,0.203125

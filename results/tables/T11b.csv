@@ -1,0 +1,67 @@
+regime,predictor,gain vs all,lo,hi
+same distribution,learned Markov blanket,0.008297028326985484,0.006220263305620749,0.010476324725406121
+same distribution,graph-informed ensemble,0.011974978844918346,0.009953721035919554,0.014203756503886025
+same distribution,causal adaptive (drop changed CHILDREN),0.008484377312552563,0.00637158278327947,0.010647898505461094
+same distribution,"graph, no direction (drop any changed)",0.008318378198558215,0.006238704547844658,0.010497575727670084
+same distribution,graph-free: drop features whose conditional changed,-0.00022699584907583532,-0.0006808631278670124,0.0
+same distribution,graph-free: drop features whose marginal changed,1.6832628883628466e-05,0.0,5.049788665088539e-05
+same distribution,oracle (drop true broken children),0.008297028326985484,0.006220263305620749,0.010476324725406121
+same distribution,parents only,-0.11327516998921147,-0.1622375773547713,-0.07204929795253907
+same distribution,causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose conditional changed,0.008711373161628398,0.006527096162735259,0.01102433361163686
+same distribution,"causal adaptive (drop changed CHILDREN) MINUS graph, no direction (drop any changed)",0.0001659991139943487,0.0,0.0004979973419830461
+same distribution,causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose marginal changed,0.008467544683668934,0.00637158278327947,0.010612283509870604
+children broken (should drop),learned Markov blanket,-0.0031237923209664316,-0.016153483532906777,0.009186388299906898
+children broken (should drop),graph-informed ensemble,0.02047284665270794,0.009036885183865685,0.03350913569096682
+children broken (should drop),causal adaptive (drop changed CHILDREN),0.23840713452728418,0.16105644688223097,0.30823084313197985
+children broken (should drop),"graph, no direction (drop any changed)",0.2646015198655985,0.18728020163691023,0.33699012269409406
+children broken (should drop),graph-free: drop features whose conditional changed,0.21757778646811957,0.16030529197145527,0.27792777368133625
+children broken (should drop),graph-free: drop features whose marginal changed,-0.002166461920730782,-0.004752537851778349,-0.0002713287081103022
+children broken (should drop),oracle (drop true broken children),0.2879209753062929,0.22922156023375231,0.3490754332232342
+children broken (should drop),parents only,0.18127244849070126,0.09053172872347053,0.2626634548345036
+children broken (should drop),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose conditional changed,0.020829348059164605,-0.06944794975550318,0.09796156983827566
+children broken (should drop),"causal adaptive (drop changed CHILDREN) MINUS graph, no direction (drop any changed)",-0.026194385338314315,-0.07043551439679221,0.004662803626498561
+children broken (should drop),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose marginal changed,0.24057359644801496,0.1626376042095961,0.3108665886277691
+parents' mechanism broken (should keep),learned Markov blanket,0.010312502310939303,0.007299785434604523,0.013550935311773907
+parents' mechanism broken (should keep),graph-informed ensemble,0.014047541851040329,0.011195276418033166,0.01711425711560469
+parents' mechanism broken (should keep),causal adaptive (drop changed CHILDREN),-0.027023262396284962,-0.08641914963277936,0.010038602407463354
+parents' mechanism broken (should keep),"graph, no direction (drop any changed)",-0.19558586828154353,-0.26200924839571726,-0.13277094892328184
+parents' mechanism broken (should keep),graph-free: drop features whose conditional changed,-0.2071279287227683,-0.27613940037765816,-0.14605941446994172
+parents' mechanism broken (should keep),graph-free: drop features whose marginal changed,-0.0031155221314099844,-0.009137782464889116,6.412244908971861e-05
+parents' mechanism broken (should keep),oracle (drop true broken children),0.010312502310939303,0.007299785434604523,0.013550935311773907
+parents' mechanism broken (should keep),parents only,-0.14956301938395802,-0.22043728700971169,-0.08922767866551756
+parents' mechanism broken (should keep),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose conditional changed,0.18010466632648334,0.09671745250829131,0.2618449349225746
+parents' mechanism broken (should keep),"causal adaptive (drop changed CHILDREN) MINUS graph, no direction (drop any changed)",0.1685626058852586,0.10624363005164132,0.23226203297953554
+parents' mechanism broken (should keep),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose marginal changed,-0.023907740264874976,-0.07735109186957301,0.010241035299736028
+non-blanket broken (irrelevant),learned Markov blanket,0.02135607605847994,0.010209307525239884,0.03707800098430895
+non-blanket broken (irrelevant),graph-informed ensemble,0.02119252913587634,0.012350225914393054,0.03355399987376944
+non-blanket broken (irrelevant),causal adaptive (drop changed CHILDREN),0.021505458162323972,0.010369208515362216,0.03709960505758085
+non-blanket broken (irrelevant),"graph, no direction (drop any changed)",0.015898799181963342,0.0019814405131885595,0.03238070909262327
+non-blanket broken (irrelevant),graph-free: drop features whose conditional changed,-0.04771164334180287,-0.0703919729823389,-0.027058981506469498
+non-blanket broken (irrelevant),graph-free: drop features whose marginal changed,-0.0010815955486237747,-0.0029999085040282756,9.765974014647183e-06
+non-blanket broken (irrelevant),oracle (drop true broken children),0.02135607605847994,0.010209307525239884,0.03707800098430895
+non-blanket broken (irrelevant),parents only,-0.10117813204194456,-0.15211303374395602,-0.055556030084500496
+non-blanket broken (irrelevant),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose conditional changed,0.06921710150412683,0.04354638196528039,0.09813329578385065
+non-blanket broken (irrelevant),"causal adaptive (drop changed CHILDREN) MINUS graph, no direction (drop any changed)",0.005606658980360632,0.0012943978606695743,0.012900625574551277
+non-blanket broken (irrelevant),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose marginal changed,0.022587053710947748,0.010806889235292572,0.03826776425709613
+parents shifted (covariate shift),learned Markov blanket,0.020484022091472563,0.007638097991182006,0.03391868765440404
+parents shifted (covariate shift),graph-informed ensemble,0.02575442605746774,0.019349337807523934,0.03253102271596227
+parents shifted (covariate shift),causal adaptive (drop changed CHILDREN),-0.03790235802123541,-0.13627198663428267,0.02199038299546002
+parents shifted (covariate shift),"graph, no direction (drop any changed)",-0.32677088449829284,-0.4798589584786982,-0.19968992621830398
+parents shifted (covariate shift),graph-free: drop features whose conditional changed,-0.42740165307465866,-0.5751412726397958,-0.30019819281017823
+parents shifted (covariate shift),graph-free: drop features whose marginal changed,-1.9641684302530003,-2.25430997813199,-1.6869294422361676
+parents shifted (covariate shift),oracle (drop true broken children),0.020484022091472563,0.007638097991182006,0.03391868765440404
+parents shifted (covariate shift),parents only,-0.20482159900858493,-0.3441957200774883,-0.09296035662800031
+parents shifted (covariate shift),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose conditional changed,0.38949929505342323,0.22035062220116694,0.5589856538288661
+parents shifted (covariate shift),"causal adaptive (drop changed CHILDREN) MINUS graph, no direction (drop any changed)",0.2888685264770574,0.1432403510137018,0.4468885182546613
+parents shifted (covariate shift),causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose marginal changed,1.9262660722317648,1.6250472280390362,2.2320836528490124
+children + parents broken,learned Markov blanket,0.0009306878523218983,-0.018837103166306088,0.019496837395899323
+children + parents broken,graph-informed ensemble,0.02609365019184496,0.011411085804278909,0.043130846134998395
+children + parents broken,causal adaptive (drop changed CHILDREN),0.23150314519950033,0.12412897117966828,0.33338865932255823
+children + parents broken,"graph, no direction (drop any changed)",-0.2409310194481733,-0.36018915360188775,-0.11761892928143566
+children + parents broken,graph-free: drop features whose conditional changed,-0.21760334720079202,-0.3327142286605788,-0.1042002825853669
+children + parents broken,graph-free: drop features whose marginal changed,-0.0026602901825249214,-0.0060953303912876415,-0.0001957559147800162
+children + parents broken,oracle (drop true broken children),0.3532051858630801,0.2807506742775784,0.42700644591261744
+children + parents broken,parents only,0.21583853915816148,0.10294917872781002,0.3212081703832214
+children + parents broken,causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose conditional changed,0.4491064924002924,0.31736715051655334,0.5730385166156539
+children + parents broken,"causal adaptive (drop changed CHILDREN) MINUS graph, no direction (drop any changed)",0.4724341646476736,0.36263080138907267,0.5796536858745361
+children + parents broken,causal adaptive (drop changed CHILDREN) MINUS graph-free: drop features whose marginal changed,0.23416343538202528,0.1273751572765173,0.3370498064582087
