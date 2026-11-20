@@ -55,7 +55,9 @@ def load(name):
     if not p.exists():
         return None
     d = pd.DataFrame([json.loads(l) for l in p.read_text().splitlines()])
-    return d[d.error.isna() & (d.seed < 10)]  # the grid is seeds 0-9; some files hold extra seeds
+    d = d[d.error.isna() & (d.seed < 10)]  # the grid is seeds 0-9; some files hold extra seeds
+    keys = [k for k in ("graph", "mechanism", "d", "n", "seed", "method") if k in d]
+    return d.drop_duplicates(keys, keep="first")  # older runs left duplicate rows
 
 
 def penalty_audit(cfg):

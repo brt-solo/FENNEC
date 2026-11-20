@@ -1,0 +1,8 @@
+{
+  "name": "e2c",
+  "description": "E2c: same systems as E2b; keep the top-k features by FENNEC population frequency, k chosen by inner 5-fold CV on training rows",
+  "base_config": "e2b.json",
+  "k_grid": [1, 2, 3, 4, 6, 8, 10, 12, 15, 20, 25, 30],
+  "inner_folds": 5,
+  "fixed_thresholds": [0.1, 0.2]
+}
