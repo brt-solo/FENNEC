@@ -115,11 +115,14 @@ class CohortSystem:
             self.s_mu, self.s_sd = s.mean(), s.std() + 1e-12
         s = (s - self.s_mu) / self.s_sd
         y = np.sqrt(self.signal_r2) * s + np.sqrt(1 - self.signal_r2) * rng.normal(size=n)
+        self._last_latent = L[:, self.y_latents]
         return X, y
 
-    def sample(self, n, rng, regime="iid"):
+    def sample(self, n, rng, regime="iid", return_latent=False):
+        """Standardized (X, y); with return_latent=True also the values of Y's two latent causes."""
         X, y = self._raw(n, rng, regime)
-        return (X - self.mu) / self.sd, (y - self.y_mu) / self.y_sd
+        out = ((X - self.mu) / self.sd, (y - self.y_mu) / self.y_sd)
+        return out + (self._last_latent,) if return_latent else out
 
     def proxies(self):
         """Measured variables driven by a latent cause of Y (predictive of Y, not causes)."""

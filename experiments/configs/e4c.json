@@ -1,0 +1,19 @@
+{
+  "name": "e4c",
+  "description": "E4c: SCM-based handling of a missing sub-study block (microbiome tier observed for ~30% of rows; MCAR or case-enriched), vs pattern submodels, XGBoost NaN handling, mean+indicator, MICE",
+  "p": [200, 500],
+  "n": [800, 1600],
+  "signal_r2": 0.3,
+  "latent_y_weight": 0.25,
+  "n_causes": 15,
+  "train_mechanisms": ["mcar", "case_enriched"],
+  "obs_frac": 0.3,
+  "case_strength": 1.5,
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "n_test": 4000,
+  "test_regimes": ["same", "mcar", "none", "full"],
+  "screen": 60,
+  "penalty_mult": 1.0,
+  "stability": {"B": 30, "frac": 0.5, "threshold": 0.3},
+  "mice": {"max_iter": 5, "n_nearest_features": 40}
+}

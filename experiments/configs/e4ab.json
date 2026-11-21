@@ -1,0 +1,22 @@
+{
+  "name": "e4ab",
+  "description": "E4a latent factors from proxy clusters; E4b graph-distance penalties. CHILD-like systems with weak (0.25) or real (1.0) latent causes of Y",
+  "p": [200, 1000],
+  "n": [400, 800],
+  "signal_r2": 0.3,
+  "latent_y_weight": [0.25, 1.0],
+  "n_causes": 15,
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "n_test": 4000,
+  "regimes": ["iid", "proxy_break", "cause_shift"],
+  "screen": 60,
+  "penalty_mult": 1.0,
+  "stability": {"B": 30, "frac": 0.5, "threshold": 0.3},
+  "n_factors": 10,
+  "distance_scales": {
+    "dist_soft":   {"1": 1.0, "2": 0.5, "3": 0.2},
+    "dist_strong": {"1": 1.0, "2": 0.3, "3": 0.05}
+  },
+  "adaptive_floor": 0.05,
+  "xgb_colsample_bynode": 0.3
+}
